@@ -42,9 +42,10 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #207a8c;
   cursor: pointer;
   transition: border-color 0.25s;
+  size:15em;
 }
 button:hover {
   border-color: #646cff;
@@ -65,4 +66,73 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+body {
+  margin: 0; 
+  padding: 0; 
+  padding-top: 0px; 
+  
+
+}
+
+.custom-navbar {
+  border-bottom: 2px solid #007bff; 
+}
+
+
+.navbar {
+  height: 8vh; 
+  width: 100vw;
+
+
+}
+
+#root {
+  margin: 0; 
+  padding: 0; 
+  padding-top: 0px; 
+  
+
+  
+}
+
+#menu1 {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  border: 1px black;
+  background-color: blue;
+
+}
+#menu2 {
+  background-color: rgb(40, 119, 162);
+  
+}
+#menu3 {
+  background-color: blue;
+  
+}
+#menu4 {
+  background-color: rgb(40, 119, 162);
+  
+}
+.nav-buttons {
+  display: flex;
+  width: 100%;
+}
+
+.nav-buttons .button {
+  flex: 1; /* Each button takes equal space */
+  text-align: center; /* Center text in buttons */
+  padding: 10px; /* Padding for buttons */
+  border: none; /* Remove default border */
+  color: white; /* Text color */
+  text-decoration: none; /* Remove underline */
+  height: 100%;
+}
+
+span {
+
+  display:none;
 }
