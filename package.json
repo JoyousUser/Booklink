@@ -3,6 +3,7 @@
     "bootstrap": "^5.3.3",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
+    "react-bootstrap": "^2.10.2",
     "react-router-dom": "^6.23.1",
     "sort-by": "^0.0.2"
   }
