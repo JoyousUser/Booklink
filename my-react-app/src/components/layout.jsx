@@ -20,10 +20,11 @@ const Layout = ({ children }) => {
   */}
   <div className="collapse navbar-collapse" id="navbarNav">
     <Nav className="mr-auto nav-buttons">
-      <Nav.Link href="/" className="text-primary button" id="menu1">Login</Nav.Link>
+      <Nav.Link href="/login" className="text-primary button" id="menu1">Login</Nav.Link>
       <Nav.Link href="/signup" className="text-primary button" id="menu2">Signup</Nav.Link>
       <Nav.Link href="/browse" className="text-primary button" id="menu3">Browse</Nav.Link>
-      <Nav.Link href="/contact" className="text-primary button" id="menu4">Contact</Nav.Link>
+      <Nav.Link href="/home" className="text-primary button" id="menu4">Home</Nav.Link>
+      <Nav.Link href="/booklink" className="text-primary button" id="menu5">Booklink</Nav.Link>
       
     </Nav>
   </div>

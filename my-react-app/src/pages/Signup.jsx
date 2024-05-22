@@ -1,17 +1,18 @@
 import React from 'react';
 
-import CenteredForm from '../components/login';
+
+import SignupCentered from '../components/signup';
 import Layout from '/wamp64/www/Booklink/my-react-app/src/components/layout';
 
 
 
-const Login = () => {
+const Signup = () => {
   return (
     <>
     <Layout></Layout>
-    <CenteredForm></CenteredForm>
+    <SignupCentered></SignupCentered>
     </>
   );
 };
 
-export default Login;
+export default Signup;
