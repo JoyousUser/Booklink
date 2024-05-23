@@ -26,7 +26,7 @@ function SignupCentered() {
               
               
               
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" id="signupSubmitButton">
                 Submit
               </Button>
             </Form>

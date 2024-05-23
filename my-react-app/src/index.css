@@ -85,27 +85,33 @@ button:focus-visible {
 }
 
 #menu1 {
-  position: relative;
-  top: 0px;
-  left: 0px;
-  border: 1px black;
+  
   background-color: blue;
+  border: 1px;
 
 }
 #menu2 {
   background-color: rgb(40, 119, 162);
   
+  border: 1px;
+  
 }
 #menu3 {
   background-color: blue;
+ 
+  border: 1px;
   
 }
 #menu4 {
   background-color: rgb(40, 119, 162);
   
+  border: 1px;
+  
 }
 #menu5 {
   background-color: blue;
+  
+  border: 1px;
   
 }
 .nav-buttons {
