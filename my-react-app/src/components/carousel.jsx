@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import ExampleCarouselImage from '../assets/cover.jpg';
 
+
 function ControlledCarousel() {
   const [index, setIndex] = useState(0);
 

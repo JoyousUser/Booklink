@@ -11,28 +11,28 @@ function BookLinkForm() {
               <Form>
                 
                 <Form.Group className="mb-3" controlId="bookSubmitTitle">
-                  <Form.Check type="" label="" />
                   <Form.Label>Title of the book</Form.Label>
+                  <Form.Control type="text" placeholder="Enter title" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="bookSubmitAuthor">
-                  <Form.Check type="" label="" />
                   <Form.Label>Author of the book</Form.Label>
+                  <Form.Control type="text" placeholder="Enter author" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="bookSubmitEditor">
-                  <Form.Check type="" label="" />
                   <Form.Label>Editor of the book</Form.Label>
+                  <Form.Control type="text" placeholder="Enter editor" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="bookSubmitEditorDate">
-                  <Form.Check type="" label="" />
                   <Form.Label>Publication date of the book</Form.Label>
+                  <Form.Control type="date" placeholder="Select publication date" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="bookSubmitISBN">
-                  <Form.Check type="" label="" />
                   <Form.Label>ISBN ID of the book</Form.Label>
+                  <Form.Control type="text" placeholder="Enter ISBN ID" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="bookSubmitDownloadLink">
-                  <Form.Check type="" label="" />
                   <Form.Label>Gutenberg download link of the book</Form.Label>
+                  <Form.Control type="text" placeholder="Enter download link" />
                 </Form.Group>
                 
                 <Button variant="secondary" type="submit" id="bookSubmitButton">
@@ -42,7 +42,7 @@ function BookLinkForm() {
             </Col>
           </Row>
         </Container>
-      );
-    }
+    );
+}
 
 export default BookLinkForm;
