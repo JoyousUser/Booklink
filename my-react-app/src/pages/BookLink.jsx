@@ -11,7 +11,7 @@ const BookLink = () => {
     <>
     <Layout></Layout>
     <BookLinkForm></BookLinkForm>
-    <Carousel></Carousel>
+    
     
     </>
   );
