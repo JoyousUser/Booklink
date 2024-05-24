@@ -6,7 +6,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 function SignupCentered() {
     return (
       <Container>
-        <Row className="justify-content-center">
+        <Row className="justify-content-center bg-dark">
           <Col md={6}>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmailSignup" >

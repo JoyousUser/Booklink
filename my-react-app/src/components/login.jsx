@@ -7,7 +7,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 function CenteredForm() {
     return (
       <Container>
-        <Row className="justify-content-center bg-light">
+        <Row className="justify-content-center bg-dark">
           <Col md={6}>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -22,7 +22,7 @@ function CenteredForm() {
               </Form.Group>
               
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
+                <Form.Check type="checkbox" label="Check me out" className="text-light"/>
               </Form.Group>
               
               <Button variant="primary" type="submit" id="loginSubmitButton">
