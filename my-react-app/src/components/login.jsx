@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import '../index.css';
 import { Col, Container, Row } from 'react-bootstrap';
 
+
 function CenteredForm() {
     return (
       <Container>
