@@ -3,6 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import ExampleCarouselImage from '../assets/cover.jpg';
 
 
+
 function ControlledCarousel() {
   const [index, setIndex] = useState(0);
 
@@ -11,6 +12,7 @@ function ControlledCarousel() {
   };
 
   return (
+    
     <Carousel activeIndex={index} onSelect={handleSelect}>
       <Carousel.Item>
         <img src={ExampleCarouselImage} alt="First slide" />
@@ -44,6 +46,7 @@ function ControlledCarousel() {
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
+    
   );
 }
 
