@@ -10,17 +10,17 @@ function SignupCentered() {
           <Col md={6}>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmailSignup" >
-                <Form.Label>Email address</Form.Label>
+                <Form.Label className="text-light">Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email"/>
                 
               </Form.Group>
   
               <Form.Group className="mb-3" controlId="formBasicPasswordSignup" >
-                <Form.Label>Password</Form.Label>
+                <Form.Label className="text-light">Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPasswordSignupConfirmation" >
-                <Form.Label> Confirm Password</Form.Label>
+                <Form.Label className="text-light"> Confirm Password</Form.Label>
                 <Form.Control type="password" placeholder="Password confirmation" />
               </Form.Group>
               

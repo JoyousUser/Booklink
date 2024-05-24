@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     <>
       <Navbar bg="light" expand="lg" fixed="top" className="custom-navbar">
         <Container fluid>
-          <Navbar.Brand href="#">Navbar</Navbar.Brand>
+          <Navbar.Brand href="#">Nav</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarNav" />
           <Navbar.Collapse id="navbarNav">
             <Nav className="me-auto nav-buttons">
