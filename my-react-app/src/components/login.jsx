@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Form, Col, Container, Row } from 'react-bootstrap';
-import { useAppContext } from '../appContext'; // Import the useAppContext hook
+import { useAppContext } from '../appContext'; 
+
+
 
 function CenteredForm() {
   const { dispatch } = useAppContext();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState(null);
 
   const validate = () => {
     const errors = {};
@@ -28,10 +30,17 @@ function CenteredForm() {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      const userData = { email, password };
-      dispatch({ type: 'SET_USER', payload: userData });
+      // Check for correct email and password
+      if (email === 'hello@email.fr' && password === 'helloaaa9') {
+        const mockApiResponse = { email, name: 'John Doe' }; // Replace with actual API response if needed
+        dispatch({ type: 'SET_USER', payload: mockApiResponse });
+        setApiError(null);
+      } else {
+        setApiError('Invalid email or password');
+      }
     } else {
       setErrors(validationErrors);
+      setApiError(null);
     }
   };
 
@@ -67,6 +76,8 @@ function CenteredForm() {
                 {errors.password}
               </Form.Control.Feedback>
             </Form.Group>
+
+            {apiError && <p className="text-danger">{apiError}</p>}
 
             <Button variant="primary" type="submit" id="loginSubmitButton">
               Submit
