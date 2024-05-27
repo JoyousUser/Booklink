@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import BookLink from "./pages/BookLink";
+import Browse from "./pages/Browse";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
   {
     path: "/booklink",
     element: <BookLink />,
+    
+  },
+  {
+    path: "/browse",
+    element: <Browse />,
     
   },
   
