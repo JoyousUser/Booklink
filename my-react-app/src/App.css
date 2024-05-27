@@ -112,3 +112,34 @@ span {
   margin: 0;
   padding: 0;
 }
+
+img {
+
+  background: tomato;
+  padding: 5px;
+  
+  margin-left: 100px;
+  margin-top: 8vh;
+  line-height: 250px;
+  line-break: 100vw;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 100% 100%;
+  margin-right: auto;
+  
+}

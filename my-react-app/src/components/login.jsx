@@ -30,11 +30,12 @@ function CenteredForm() {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      // Check for correct email and password
+      
       if (email === 'hello@email.fr' && password === 'helloaaa9') {
-        const mockApiResponse = { email, name: 'John Doe' }; // Replace with actual API response if needed
+        const mockApiResponse = { email, name: 'John Doe' }; 
         dispatch({ type: 'SET_USER', payload: mockApiResponse });
         setApiError(null);
+        localStorage.setItem('loggedIn', '1');
       } else {
         setApiError('Invalid email or password');
       }

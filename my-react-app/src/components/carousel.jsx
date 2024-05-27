@@ -13,12 +13,18 @@ function ControlledCarousel() {
 
   return (
     
-    <Carousel activeIndex={index} onSelect={handleSelect}>
+    <Carousel activeIndex={index} onSelect={handleSelect} className='bg-dark'>
       <Carousel.Item>
         <img src={ExampleCarouselImage} alt="First slide" />
         <img src={ExampleCarouselImage} alt="First slide" />
         <img src={ExampleCarouselImage} alt="First slide" />
         <img src={ExampleCarouselImage} alt="First slide" />
+        <img src={ExampleCarouselImage} alt="First slide" />
+        <img src={ExampleCarouselImage} alt="First slide" />
+        <img src={ExampleCarouselImage} alt="First slide" />
+        <img src={ExampleCarouselImage} alt="First slide" />
+        
+        
         
         
         
