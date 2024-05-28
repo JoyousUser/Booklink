@@ -13,7 +13,7 @@ app.use(cors());
 const mockUser = {
   email: 'hello@email.fr',
   password: 'helloaaa9',
-  name: 'John Doe'
+  name: 'Sami'
 };
 
 
