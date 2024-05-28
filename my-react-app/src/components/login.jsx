@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Col, Container, Row } from 'react-bootstrap';
-import { useAppContext } from '../appContext'; 
-
-
+import { useAppContext } from '../appContext'; // Adjust the import path as necessary
 
 function CenteredForm() {
   const { dispatch } = useAppContext();
@@ -26,18 +24,26 @@ function CenteredForm() {
     return errors;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      
-      if (email === 'hello@email.fr' && password === 'helloaaa9') {
-        const mockApiResponse = { email, name: 'John Doe' }; 
-        dispatch({ type: 'SET_USER', payload: mockApiResponse });
-        setApiError(null);
-        localStorage.setItem('loggedIn', '1');
-      } else {
-        setApiError('Invalid email or password');
+      try {
+        const response = await fetch('http://localhost:5000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          dispatch({ type: 'SET_USER', payload: userData });
+          setApiError(null);
+        } else {
+          const errorData = await response.json();
+          setApiError(errorData.message || 'Login failed');
+        }
+      } catch (error) {
+        setApiError('Network error: ' + error.message);
       }
     } else {
       setErrors(validationErrors);

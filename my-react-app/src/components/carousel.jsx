@@ -15,7 +15,7 @@ function ControlledCarousel() {
     
     <Carousel activeIndex={index} onSelect={handleSelect} className='bg-dark'>
       <Carousel.Item>
-        <img src={ExampleCarouselImage} alt="First slide" />
+        <a href="/login"><img src={ExampleCarouselImage} alt="First slide" /></a>
         <img src={ExampleCarouselImage} alt="First slide" />
         <img src={ExampleCarouselImage} alt="First slide" />
         <img src={ExampleCarouselImage} alt="First slide" />
@@ -29,7 +29,7 @@ function ControlledCarousel() {
         
         
         <Carousel.Caption>
-          <a>DOWNLOAD</a>
+          <a></a>
           
         </Carousel.Caption>
       </Carousel.Item>
@@ -39,7 +39,7 @@ function ControlledCarousel() {
         <img src={ExampleCarouselImage} alt="Second slide" />
         <img src={ExampleCarouselImage} alt="Second slide" />
         <Carousel.Caption>
-        <a>DOWNLOAD</a>
+        <a></a>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
@@ -48,7 +48,7 @@ function ControlledCarousel() {
         <img src={ExampleCarouselImage} alt="Third slide" />
         <img src={ExampleCarouselImage} alt="Third slide" />
         <Carousel.Caption>
-        <a>DOWNLOAD</a>
+        <a></a>
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
