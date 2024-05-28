@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup'
 import BookLink from './pages/BookLink';
 import Browse from './pages/Browse';
+import Dashboard from './components/dashboard';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/booklink" element={<BookLink />} />
         <Route path="/browse" element={<Browse />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         
         
       </Routes>

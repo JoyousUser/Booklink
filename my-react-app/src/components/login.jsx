@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Col, Container, Row } from 'react-bootstrap';
-import { useAppContext } from '../appContext'; // Adjust the import path as necessary
+import { useAppContext } from '../appContext'; 
+import { Navigate, useNavigate, useNavigation } from 'react-router-dom';
 
 function CenteredForm() {
   const { dispatch } = useAppContext();
@@ -8,6 +9,7 @@ function CenteredForm() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState(null);
+  const navigate = useNavigate();
 
   const validate = () => {
     const errors = {};
@@ -34,14 +36,17 @@ function CenteredForm() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
         });
-        if (response.ok) {
-          const userData = await response.json();
-          dispatch({ type: 'SET_USER', payload: userData });
-          setApiError(null);
-        } else {
+
+        if (!response.ok) {
           const errorData = await response.json();
           setApiError(errorData.message || 'Login failed');
+          return;
         }
+
+        const userData = await response.json();
+        dispatch({ type: 'SET_USER', payload: userData });
+        setApiError(null);
+        navigate('/dashboard');
       } catch (error) {
         setApiError('Network error: ' + error.message);
       }

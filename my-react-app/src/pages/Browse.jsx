@@ -3,6 +3,7 @@ import ControlledCarousel from "../components/carousel"
 
 
 
+
 const Browse = () => {
     
 
@@ -12,6 +13,7 @@ const Browse = () => {
 
     <Layout></Layout>
     <ControlledCarousel></ControlledCarousel>
+    
     </>
     
     
