@@ -1,8 +1,8 @@
-// components/Dashboard.jsx
+
 import React from 'react';
 import { useAppContext } from '../appContext'; 
 
-function Dashboard() {
+function DashboardComponent() {
   const { state } = useAppContext();
   const { user } = state;
   
@@ -16,4 +16,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardComponent;

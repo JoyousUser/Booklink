@@ -35,18 +35,17 @@ function CenteredForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
+          credentials: 'include'
         });
-
-        if (!response.ok) {
+        if (response.ok) {
+          const userData = await response.json();
+          dispatch({ type: 'SET_USER', payload: userData });
+          setApiError(null);
+          navigate('/dashboard');
+        } else {
           const errorData = await response.json();
           setApiError(errorData.message || 'Login failed');
-          return;
         }
-
-        const userData = await response.json();
-        dispatch({ type: 'SET_USER', payload: userData });
-        setApiError(null);
-        navigate('/dashboard');
       } catch (error) {
         setApiError('Network error: ' + error.message);
       }
