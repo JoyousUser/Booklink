@@ -27,7 +27,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/session', {
+        const response = await fetch('http://localhost:3500/api/session', {
           method: 'GET',
           credentials: 'include',
         });

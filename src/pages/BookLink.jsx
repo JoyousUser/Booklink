@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Carousel } from 'react-bootstrap';
-import Layout from '/wamp64/www/Booklink/my-react-app/src/components/layout'
+import Layout from '../components/layout'
 import BookLinkForm from '../components/bookLink';
 
 

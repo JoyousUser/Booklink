@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CenteredForm from '../components/login';
-import Layout from '/wamp64/www/Booklink/my-react-app/src/components/layout';
+import Layout from '../components/layout';
 
 
 

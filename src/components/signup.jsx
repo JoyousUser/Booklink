@@ -6,6 +6,7 @@ import { Navigate, useNavigate, useNavigation } from 'react-router-dom';
 function CenteredForm() {
   const { dispatch } = useAppContext();
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState(null);
@@ -18,7 +19,9 @@ function CenteredForm() {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       errors.email = 'Email is invalid';
     }
-
+    if (!username) {
+      errors.username = 'Password is required';
+    }
     if (!password) {
       errors.password = 'Password is required';
     }
@@ -31,10 +34,10 @@ function CenteredForm() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch('http://localhost:3500/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, username, password }),
           credentials: 'include'
         });
         if (response.ok) {
@@ -71,6 +74,20 @@ function CenteredForm() {
               />
               <Form.Control.Feedback type="invalid">
                 {errors.email}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="username"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                isInvalid={!!errors.username}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.username}
               </Form.Control.Feedback>
             </Form.Group>
 

@@ -1,4 +1,4 @@
-import Layout from "/wamp64/www/Booklink/my-react-app/src/components/layout";
+import Layout from "../components/layout";
 import ControlledCarousel from "../components/carousel"
 import BookSelectionLoggedIn from "../components/myBooks";
 import AllBooks from "../components/books";
