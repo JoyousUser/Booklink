@@ -31,7 +31,7 @@ function CenteredForm() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('http://localhost:3500/api/login', {
+        const response = await fetch('http://localhost:3500/api/auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),

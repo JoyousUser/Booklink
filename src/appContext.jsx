@@ -1,21 +1,20 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, useContext } from 'react';
+
+const AppContext = createContext();
 
 const initialState = {
   user: null,
-  books: [],
-  borrowedBooks: [],
+  token: localStorage.getItem('token') || null, 
 };
-
-const AppContext = createContext();
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload };
+    case 'SET_TOKEN':
+      return { ...state, token: action.payload };
     case 'LOGOUT_USER':
-      return { ...state, user: null };
-    case 'ADD_BOOK':
-      return { ...state, books: [...state.books, action.payload] };
+      return { ...state, user: null, token: null };
     default:
       return state;
   }
@@ -31,11 +30,26 @@ export const AppProvider = ({ children }) => {
           method: 'GET',
           credentials: 'include',
         });
+        if (response.status === 401) {
+          // If access token is expired, attempt to refresh it
+          const refreshResponse = await fetch('http://localhost:3500/api/refresh', {
+              method: 'GET',
+              credentials: 'include',
+          });
+
+          if (refreshResponse.ok) {
+              const refreshedData = await refreshResponse.json();
+              dispatch({ type: 'SET_USER', payload: { user: refreshedData.user, token: refreshedData.token } });
+              return;
+          }
+      }
         if (response.ok) {
           const userData = await response.json();
           dispatch({ type: 'SET_USER', payload: userData });
         }
-      } catch (error) {
+        
+      } 
+        catch (error) {
         console.error('Error checking session', error);
       }
     };
@@ -43,11 +57,7 @@ export const AppProvider = ({ children }) => {
     checkSession();
   }, []);
 
-  return (
-    <AppContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = () => useContext(AppContext);

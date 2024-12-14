@@ -9,7 +9,6 @@ const BookSelectionLoggedIn = () => {
 
   const validateBooks = () => {
     if (user) {
-      console.log('Logged in');
       return (
         <>
         <Container fluid className='bg-dark'>
