@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import ListGroup from 'react-bootstrap/ListGroup';
+import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
+import { useAppContext } from '../appContext';
+
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [sort, setSort] = useState('createdAt'); // Default sort field
   const [order, setOrder] = useState('desc');   // Default order
   const [page, setPage] = useState(1);          // Current page
+  const { state } = useAppContext();
+  const { username } = state;
 
   // Fetch books from backend
   const fetchBooks = async () => {
@@ -25,9 +31,10 @@ const AllBooks = () => {
   }, [sort, order, page]);
 
   return (
-    <div>
-      <h1>Books</h1>
-      <div>
+    <>
+    
+      
+      
         <button onClick={() => { setSort('title'); setOrder('asc'); }}>
           Sort by Title (Asc)
         </button>
@@ -37,21 +44,48 @@ const AllBooks = () => {
         <button onClick={() => { setSort('createdAt'); setOrder('desc'); }}>
           Sort by Date (Newest)
         </button>
-      </div>
-      <ul>
+      
+   
+        <h1 className='bg-light'>Here are your books, {username}</h1>
+        <Container fluid className='bg-dark'>
+          <Row className="d-flex flex-row flex-wrap"><h1 className='bg-dark'>-------------------</h1>
+              
+            <Col className="mr-2 mb-2">
         {books.map((book) => (
-          <li key={book._id}>
-            {book.title} by {book.author}
-          </li>
+          <>    
+           <ListGroup>   
+          <ListGroup.Item key={book._id}>
+            {book.title}
+          </ListGroup.Item>
+          <ListGroup.Item key={book._id}>
+            {book.author}
+          </ListGroup.Item>
+          <ListGroup.Item key={book._id}>
+            {book.publishdate}
+          </ListGroup.Item>
+          <ListGroup.Item key={book._id}>
+            {book.pages}
+          </ListGroup.Item>
+          <ListGroup.Item key={book._id}>
+            {book.categories}
+          </ListGroup.Item>
+         </ListGroup></>
         ))}
-      </ul>
+        
+   </Col>
+            </Row>
+            </Container>
       <button disabled={page === 1} onClick={() => setPage(page - 1)}>
         Previous
       </button>
       <button onClick={() => setPage(page + 1)}>
         Next
       </button>
-    </div>
+
+   
+    
+    </>
+    
   );
 };
 
