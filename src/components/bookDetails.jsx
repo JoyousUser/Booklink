@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { useAppContext } from '../appContext';
 
-const AllBooks = () => {
+const BookDetails = () => {
   const [books, setBooks] = useState([]);
-  const [sort, setSort] = useState('createdAt'); // Default sort field
-  const [order, setOrder] = useState('desc');   // Default order
-  const [page, setPage] = useState(1);          // Current page
+  const [id, setId] = useState(1);          // Current page
   const { state } = useAppContext();
   const { username } = state;
 
@@ -14,7 +12,7 @@ const AllBooks = () => {
   const fetchBooks = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3500/api/books?page=${page}&sort=${sort}&order=${order}`
+        `http://localhost:3500/api/books?id=${id}}`
       );
       const data = await response.json();
       if (data.success) setBooks(data.data);
@@ -26,7 +24,7 @@ const AllBooks = () => {
   // Fetch books on initial render and when sort/order/page changes
   useEffect(() => {
     fetchBooks();
-  }, [sort, order, page]);
+  }, [id]);
 
   return (
     <Container fluid className="bg-dark">
@@ -60,8 +58,8 @@ const AllBooks = () => {
               <ListGroup.Item>{book.publishdate || 'Date à venir'}</ListGroup.Item>
               <ListGroup.Item>{book.isbn || `Pas encore d'ISBN`}</ListGroup.Item>
               <ListGroup.Item>
-                <a href={`/book/${book._id}`} target="_blank" rel="noopener noreferrer">
-                  {book._id ? 'Détails' : 'Pas encore de lien'}
+                <a href={book.link || '#'} target="_blank" rel="noopener noreferrer">
+                  {book.link ? 'Détails' : 'Pas encore de lien'}
                 </a>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -74,26 +72,9 @@ const AllBooks = () => {
         ))}
       </Row>
 
-      {/* Pagination Controls */}
-      <Row className="text-center mt-4">
-        <Col>
-          <button
-            className="btn btn-outline-primary mx-2"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-outline-secondary mx-2"
-            onClick={() => setPage(page + 1)}
-          >
-            Next
-          </button>
-        </Col>
-      </Row>
+      
     </Container>
   );
 };
 
-export default AllBooks;
+export default BookDetails;

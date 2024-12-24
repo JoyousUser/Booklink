@@ -16,7 +16,7 @@ const Browse = () => {
 
     <Layout></Layout>
     <ControlledCarousel></ControlledCarousel>
-    <BookSelectionLoggedIn></BookSelectionLoggedIn>
+    
     <AllBooks></AllBooks>
     <AddBooks></AddBooks>
     

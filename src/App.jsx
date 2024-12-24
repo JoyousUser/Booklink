@@ -10,6 +10,7 @@ import BookLink from './pages/BookLink';
 import Browse from './pages/Browse';
 import Dashboard from './pages/Dashboard';
 import { useAppContext } from './appContext';
+import BookDetails from './components/bookDetails';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/booklink" element={<BookLink />} />
         <Route path="/browse" element={<Browse />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/book/:id" element={<BookDetails />} />
         
         
       </Routes>

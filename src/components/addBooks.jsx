@@ -15,7 +15,7 @@ const AddBooks = () => {
     description: '',
     coverImage: '',
     categories: '',
-    openSourceLink: 'https://www.gutenberg.org/ebooks/1787',
+    openSourceLink: '',
     status: '',
   };
 
