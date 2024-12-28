@@ -116,16 +116,6 @@ const AddBooks = () => {
           />
         </div>
         <div>
-          <label>Auteur:</label>
-          <input
-            type="text"
-            name="author"
-            value={newBook.author}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
           <label>Editeur:</label>
           <input
             type="text"

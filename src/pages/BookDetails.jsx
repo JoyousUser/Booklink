@@ -4,7 +4,7 @@ import BookDetails from "../components/bookDetails"
 
 
 
-const Browse = () => {
+const BookDetailsPage = () => {
     
 
     return (
@@ -13,6 +13,10 @@ const Browse = () => {
 
     <Layout></Layout>
     <BookDetails></BookDetails>
+    
+
+    
+    
    
     
     
@@ -23,4 +27,4 @@ const Browse = () => {
 )
 }
 
-export default BookDetails;
+export default BookDetailsPage;

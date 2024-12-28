@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { useAppContext } from '../appContext';
+import ExampleCarouselImage from '../assets/cover.jpg';
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
@@ -8,7 +9,7 @@ const AllBooks = () => {
   const [order, setOrder] = useState('desc');   // Default order
   const [page, setPage] = useState(1);          // Current page
   const { state } = useAppContext();
-  const { username } = state;
+  const { user} = state;
 
   // Fetch books from backend
   const fetchBooks = async () => {
@@ -31,7 +32,7 @@ const AllBooks = () => {
   return (
     <Container fluid className="bg-dark">
       <Row className="text-light py-4">
-        <h1 className="bg-light text-dark text-center py-3">Here are your books, {username}</h1>
+        <h1 className="bg-light text-dark text-center py-3">Here are your books, {user?.name}</h1>
       </Row>
 
       {/* Sorting Controls */}
@@ -50,10 +51,12 @@ const AllBooks = () => {
       </Row>
 
       {/* Books List */}
-      <Row className="d-flex flex-row flex-wrap">
+      <Row className="d-flex flex-row flex-wrap ">
         {books.map((book) => (
           <Col xs={12} sm={6} md={4} lg={3} key={book._id} className="mb-4">
-            <ListGroup>
+            <ListGroup className="image-container">
+            <img className="imageCover" src={ExampleCarouselImage} alt="First slide"
+            />
               <ListGroup.Item>{book.title}</ListGroup.Item>
               <ListGroup.Item>{book.author}</ListGroup.Item>
               <ListGroup.Item>{book.publisher || 'Editeur à venir'}</ListGroup.Item>
@@ -93,6 +96,7 @@ const AllBooks = () => {
         </Col>
       </Row>
     </Container>
+    
   );
 };
 

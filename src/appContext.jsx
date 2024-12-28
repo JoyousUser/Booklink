@@ -5,6 +5,7 @@ const AppContext = createContext();
 const initialState = {
   user: null,
   token: localStorage.getItem('token') || null, 
+  role: null,
 };
 
 const reducer = (state, action) => {
