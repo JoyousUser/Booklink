@@ -41,9 +41,17 @@ const UserDetails = () => {
   // Patch user details
   const patchUserDetails = async () => {
     try {
+      const payload = { ...editableUser };
+  
       
-      const payload = { ...editableUser};
-      payload.roles = {}
+      if (editableUser.roles) {
+        const rolesArray = editableUser.roles.split(',').map((role) => role.trim());
+        payload.roles = rolesArray.reduce((acc, role) => {
+          acc[role] = role; 
+          return acc;
+        }, {});
+      }
+  
       const response = await fetch(`http://localhost:3500/api/users/${user._id}`, {
         method: 'PATCH',
         headers: {
@@ -51,12 +59,12 @@ const UserDetails = () => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.error || 'Failed to update user data.');
       }
-
+  
       const updatedData = await response.json();
       setUser(updatedData); // Update the original user state with the new data
     } catch (err) {
@@ -170,6 +178,9 @@ const UserDetails = () => {
           </div>
         </div>
       </div>
+      <button className="btn btn-primary mt-3"><a href="http://localhost:5173/backoffice/">
+                  Back to user management</a>
+                </button>
     </div>
   );
 };
