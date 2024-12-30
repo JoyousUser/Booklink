@@ -16,6 +16,7 @@ import UserDetails from './components/userDetails';
 
 function App() {
   return (
+   
     <Router>
       <Routes>
       <Route path="/" element={<Home />}  />
@@ -32,8 +33,9 @@ function App() {
         </Route>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/user/:id" element={<Dashboard />} />
-      </Routes>
+      </Routes> 
     </Router>
+   
   );
 }
 

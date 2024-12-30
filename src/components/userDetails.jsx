@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ExampleCarouselImage from '../assets/cover.jpg';
 
 const UserDetails = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Original user data
+  const [editableUser, setEditableUser] = useState({}); // Editable fields
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +13,7 @@ const UserDetails = () => {
     return urlParts[urlParts.length - 1];
   };
 
-  // Fetch user details based on userId
+  // Fetch user details
   const fetchUserDetails = async (id) => {
     try {
       const response = await fetch(`http://localhost:3500/api/admin/users/${id}`);
@@ -22,6 +23,11 @@ const UserDetails = () => {
       }
       const data = await response.json();
       setUser(data);
+      setEditableUser({
+        email: data.email,
+        username: data.username,
+        roles: Object.values(data.roles || {}).join(', '), // Editable fields only
+      });
     } catch (err) {
       console.error('Error fetching user details:', err.message);
       setError(err.message);
@@ -30,46 +36,73 @@ const UserDetails = () => {
       setLoading(false);
     }
   };
+  
 
-  const patchUserDetails = async (id) => {
+  // Patch user details
+  const patchUserDetails = async () => {
     try {
+      
+      const payload = { ...editableUser};
+      payload.roles = {}
+      const response = await fetch(`http://localhost:3500/api/users/${user._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-    const response = await fetch(`http://localhost:3500/api/users/${id}`);
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      throw new Error(errorResponse.error || 'Failed to patch user data');
-    }
-    const data = await response.json();
-    setUser(data);}
-    catch(err) {
-      console.error('Error patching user details:', err.message)
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Failed to update user data.');
+      }
+
+      const updatedData = await response.json();
+      setUser(updatedData); // Update the original user state with the new data
+    } catch (err) {
+      console.error('Error patching user details:', err.message);
       setError(err.message);
-      setUser(null);
-    }finally {
-      setLoading(false)
     }
-
-  }
-
-
-
-  // Helper function to format date
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
   };
 
-  // Helper function to display roles
-  const getRolesString = (roles) => {
-    if (!roles) return 'No roles assigned';
-    const roleValues = Object.values(roles);
-    return roleValues.length > 0 ? roleValues.join(', ') : 'No roles assigned';
+  const deleteUser = async () => {
+    try {
+      const payload = {
+        
+        id: user._id,
+       
+      };
+  
+      const response = await fetch(`http://localhost:3500/api/admin/users/delete`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload), // Properly formatted payload
+      });
+  
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Failed to delete user.');
+      }
+  
+      console.log('User deleted successfully.');
+      setUser(null); // Clear user state
+    } catch (err) {
+      console.error('Error deleting user:', err.message);
+      setError(err.message);
+    }
   };
 
-  // Fetch the user on component mount
+  // Handle form changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditableUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   useEffect(() => {
     const userId = getUserIdFromPath();
     if (userId) {
@@ -89,9 +122,9 @@ const UserDetails = () => {
       <div className="card">
         <div className="row g-0">
           <div className="col-md-4">
-            <img 
-              className="img-fluid rounded-start" 
-              src={user.profileImage || ExampleCarouselImage} 
+            <img
+              className="img-fluid rounded-start"
+              src={user.profileImage || ExampleCarouselImage}
               alt={`${user.username}'s profile`}
             />
           </div>
@@ -99,26 +132,39 @@ const UserDetails = () => {
             <div className="card-body">
               <h1 className="card-title">{user.username}</h1>
               <div className="card-text">
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Roles:</strong> {getRolesString(user.roles)}</p>
-                <p><strong>Member Since:</strong> {formatDate(user.createdAt)}</p>
+                <p><strong>Email:</strong></p>
+                <input
+                  type="email"
+                  name="email"
+                  value={editableUser.email || ''}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+                 <p><strong>Username:</strong></p>
+                <input
+                  type="text"
+                  name="username"
+                  value={editableUser.username || ''}
+                  onChange={handleChange}
+                  className="form-control"
+                />
                 
-                {user.settings && (
-                  <div className="mt-3">
-                    <h3>Settings</h3>
-                    <p><strong>Email Notifications:</strong> {user.settings.emailNotifications ? 'Enabled' : 'Disabled'}</p>
-                    <p><strong>Privacy Level:</strong> {user.settings.privacyLevel}</p>
-                  </div>
-                )}
-                
-                {user.stats && (
-                  <div className="mt-3">
-                    <h3>Statistics</h3>
-                    <p><strong>Reviews Written:</strong> {user.stats.reviewsWritten}</p>
-                  </div>
-                )}
-
-                <p><strong>Last Updated:</strong> {formatDate(user.updatedAt)}</p>
+                <p><strong>Roles:</strong></p>
+                <input
+                  type="text"
+                  name="roles"
+                  value={editableUser.roles || ''}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+                <button className="btn btn-primary mt-3" onClick={patchUserDetails}>
+                  Save Changes
+                </button>
+                <button className="btn btn-primary mt-3" onClick={deleteUser}>
+                  Delete user
+                </button>
+                <p className="mt-4"><strong>Member Since:</strong> {new Date(user.createdAt).toLocaleDateString('fr-FR')}</p>
+                <p><strong>Last Updated:</strong> {new Date(user.updatedAt).toLocaleDateString('fr-FR')}</p>
               </div>
             </div>
           </div>
