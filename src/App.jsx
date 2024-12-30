@@ -18,9 +18,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home />}  />
+        <Route path="/home" element={<Home />}  />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/booklink" element={<BookLink />} />
+        <Route path="/browse" element={<Browse />} />
+       
+        <Route path="/book/:id" element={<BookDetails />} />
         <Route element={<ProtectedRoute allowedRoles={['Admin', 'Moderator']} />}>
           <Route path="/backoffice" element={<BackOffice />} />
           <Route path="/backoffice/users/:id" element={<UserDetails />} />

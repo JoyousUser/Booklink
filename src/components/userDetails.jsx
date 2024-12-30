@@ -31,9 +31,31 @@ const UserDetails = () => {
     }
   };
 
+  const patchUserDetails = async (id) => {
+    try {
+
+    const response = await fetch(`http://localhost:3500/api/users/${id}`);
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.error || 'Failed to patch user data');
+    }
+    const data = await response.json();
+    setUser(data);}
+    catch(err) {
+      console.error('Error patching user details:', err.message)
+      setError(err.message);
+      setUser(null);
+    }finally {
+      setLoading(false)
+    }
+
+  }
+
+
+
   // Helper function to format date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
