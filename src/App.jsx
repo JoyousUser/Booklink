@@ -13,6 +13,7 @@ import BookDetails from './components/bookDetails';
 import ProtectedRoute from './components/protectedRoute';
 import BackOffice from './pages/BackOffice';
 import UserDetails from './components/userDetails';
+import UserProfile from './components/userProfile';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
           <Route path="/backoffice/users/:id" element={<UserDetails />} />
         </Route>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/user/:id" element={<Dashboard />} />
+        <Route path="/dashboard/user/me" element={<UserProfile />} />
       </Routes> 
     </Router>
    

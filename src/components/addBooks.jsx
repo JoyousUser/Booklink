@@ -75,23 +75,12 @@ const AddBooks = () => {
           />
         </div>
         <div>
-          <label>Auteur:</label>
-          <input
-            type="text"
-            name="author"
-            value={newBook.author}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
           <label>Titre complet:</label>
           <input
             type="text"
             name="titleLong"
             value={newBook.titleLong}
             onChange={handleChange}
-            required
           />
 
         </div>
