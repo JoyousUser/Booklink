@@ -16,8 +16,9 @@ const AddBooks = () => {
     coverImage: '',
     categories: '',
     openSourceLink: '',
-    status: '',
+    status: 'want-to-read'  // Add this line with the default value
   };
+  
 
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState(initialBookState);
@@ -30,32 +31,41 @@ const AddBooks = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check required fields
     if (!newBook.title || !newBook.author) {
       setError('Title and Author are required fields.');
       return;
     }
-  
+
     try {
       const formData = new FormData();
+
+      // Populate FormData with all fields and apply fallbacks
       Object.entries(newBook).forEach(([key, value]) => {
-        formData.append(key, value);
+        formData.append(key, value || initialBookState[key]); // Use fallback if value is empty
       });
-  
+
       const response = await fetch('http://localhost:3500/api/books/add', {
         method: 'POST',
-        body: formData, 
+        body: formData,
+        credentials: 'include', // Include cookies for authentication
       });
-  
+
       if (response.ok) {
-        const addedBook = await response.json();
-        setBooks([...books, addedBook]);
-        setNewBook(initialBookState);
-        setError(null);
+        const { book, userBook } = await response.json();
+        setBooks([...books, book]); // Update the list of books
+        setNewBook(initialBookState); // Reset the form
+        setError(null); // Clear any error
+      
       } else {
-        setError('Failed to add book');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to add book.');
+        
       }
-    } catch (error) {
-      setError('Failed to add book: ' + error.message);
+    } catch (err) {
+      setError('Failed to add book: ' + err.message);
+      
     }
   };
 

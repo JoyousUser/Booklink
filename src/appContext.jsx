@@ -3,22 +3,18 @@ import React, { createContext, useReducer, useEffect, useContext } from 'react';
 const AppContext = createContext();
 
 const initialState = {
-  user: undefined, // Change to undefined for initial loading state
-  token: localStorage.getItem('token') || null,
+  user: null,
+  token: localStorage.getItem('token') || null, 
+  role: null,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
-      return { 
-        ...state, 
-        user: action.payload,
-        token: action.payload?.accessToken || null
-      };
+      return { ...state, user: action.payload };
     case 'SET_TOKEN':
       return { ...state, token: action.payload };
     case 'LOGOUT_USER':
-      localStorage.removeItem('token');
       return { ...state, user: null, token: null };
     default:
       return state;
@@ -35,50 +31,34 @@ export const AppProvider = ({ children }) => {
           method: 'GET',
           credentials: 'include',
         });
-
         if (response.status === 401) {
-          // Try to refresh the token
+          // If access token is expired, attempt to refresh it
           const refreshResponse = await fetch('http://localhost:3500/api/refresh', {
-            method: 'GET', // Changed to POST as per your backend
-            credentials: 'include',
+              method: 'GET',
+              credentials: 'include',
           });
 
-          if (!refreshResponse.ok) {
-            dispatch({ type: 'LOGOUT_USER' });
-            return;
+          if (refreshResponse.ok) {
+              const refreshedData = await refreshResponse.json();
+              dispatch({ type: 'SET_USER', payload: { user: refreshedData.user, token: refreshedData.token } });
+              return;
           }
-
-          // After successful refresh, try to get session again
-          const newSessionResponse = await fetch('http://localhost:3500/api/session', {
-            method: 'GET',
-            credentials: 'include',
-          });
-
-          if (!newSessionResponse.ok) {
-            dispatch({ type: 'LOGOUT_USER' });
-            return;
-          }
-
-          const userData = await newSessionResponse.json();
-          dispatch({ type: 'SET_USER', payload: userData });
-        } else if (response.ok) {
+      }
+        if (response.ok) {
           const userData = await response.json();
           dispatch({ type: 'SET_USER', payload: userData });
         }
-      } catch (error) {
-        console.error('Error checking session:', error);
-        dispatch({ type: 'LOGOUT_USER' });
+        
+      } 
+        catch (error) {
+        console.error('Error checking session', error);
       }
     };
 
     checkSession();
   }, []);
 
-  return (
-    <AppContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = () => useContext(AppContext);

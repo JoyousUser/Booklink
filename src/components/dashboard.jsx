@@ -3,7 +3,7 @@ import { useAppContext } from '../appContext';
 import { useNavigate } from 'react-router-dom';
 
 function DashboardComponent() {
-  const { state, dispatch } = useAppContext(); // Changed from setState to dispatch
+  const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -11,13 +11,11 @@ function DashboardComponent() {
 
     const checkSession = async () => {
       try {
-        // Adjust these URLs to match your actual API endpoints
         const sessionRes = await fetch('http://localhost:3500/api/session', {
           credentials: 'include'
         });
 
         if (!sessionRes.ok) {
-          // If session fails, try to refresh
           const refreshRes = await fetch('http://localhost:3500/api/refresh', {
             method: 'GET',
             credentials: 'include'
@@ -27,7 +25,6 @@ function DashboardComponent() {
             throw new Error('Refresh failed');
           }
 
-          // Get fresh session after refresh
           const newSessionRes = await fetch('http://localhost:3500/api/session', {
             credentials: 'include'
           });
@@ -58,7 +55,6 @@ function DashboardComponent() {
 
     checkSession();
 
-    // Set up periodic refresh
     const refreshInterval = setInterval(async () => {
       try {
         const refreshRes = await fetch('http://localhost:3500/api/refresh', {
@@ -75,7 +71,7 @@ function DashboardComponent() {
           navigate('/login');
         }
       }
-    }, 25000); // Refresh every 25 seconds since your token expires in 30
+    }, 25000);
 
     return () => {
       mounted = false;
@@ -83,8 +79,17 @@ function DashboardComponent() {
     };
   }, [dispatch, navigate]);
 
-  // Show loading when no user data yet
-  if (!state.user && state.user !== null) {
+  useEffect(() => {
+    if (!state.user?.user) {
+      navigate('/dashboard/user/me');
+    }
+  }, [state.user, navigate]);
+
+  const sessionPrint = () => {
+    console.log(state?.user);
+  };
+
+  if (state.user === undefined) {
     return (
       <div className="text-center p-4">
         <p>Loading...</p>
@@ -92,12 +97,14 @@ function DashboardComponent() {
     );
   }
 
-  // Handle not logged in state
   if (!state.user?.user) {
     return (
-      <div className="text-center p-4">
-        <p>Please log in to view your dashboard</p>
-      </div>
+      <>
+        {sessionPrint()}
+        <div className="text-center p-4">
+          <p>Please log in to view your dashboard</p>
+        </div>
+      </>
     );
   }
 
@@ -109,10 +116,14 @@ function DashboardComponent() {
       <p>Email: {user.email}</p>
       <p>Role: {user.role?.User}</p>
 
-      <button > <a href="http://localhost:5173/dashboard/user/me">Profile</a></button>
+      <button>
+        <a href="http://localhost:5173/dashboard/user/me">Profile</a>
+      </button>
 
-      <button> Admin panel</button>
-    </>
+      <button>
+        <a href="http://localhost:5173/backoffice">Admin panel</a>
+      </button>   
+      </>
   );
 }
 
