@@ -55,8 +55,9 @@ const BookDetails = () => {
       <p><strong>Description:</strong> {book.description}</p>
       <p><strong>Categories:</strong> {book.categories?.join(', ')}</p>
       <p><strong>Pages:</strong> {book.pages}</p>
-      <img className="imageCoverDetail" src={book.coverImage?.url || ExampleCarouselImage} alt="First slide"
-            />
+      <a href={book.openSourceLink}> <img className="imageCoverDetail" src={book.coverImage?.url || ExampleCarouselImage} 
+            /></a>
+            <p><strong>Link:</strong> {book.openSourceLink}</p>
     </div>
   );
 };
