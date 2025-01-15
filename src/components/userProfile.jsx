@@ -12,13 +12,6 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Debugging helper
-  useEffect(() => {
-    if (selectedBook) {
-      console.log('Selected Book:', selectedBook);
-    }
-  }, [selectedBook]);
-
   const fetchUserBooks = async () => {
     try {
       const response = await fetch('http://localhost:3500/api/userbooks/get', {
@@ -32,17 +25,37 @@ const UserProfile = () => {
       }
 
       const data = await response.json();
-      console.log('Fetched books:', data); // Debug log
-      setUserBooks(data.data);
-      
-      // Update selected book if it exists in the new data
-      if (selectedBook) {
-        const updatedBook = data.data.find(book => book._id === selectedBook._id);
-        setSelectedBook(updatedBook || null);
-      }
+      const booksWithDetails = await Promise.all(
+        data.data.map(async (userBook) => {
+          const bookDetails = await fetchBookDetails(userBook.book);
+          return { ...userBook, bookData: bookDetails };
+        })
+      );
+
+      setUserBooks(booksWithDetails);
     } catch (err) {
       console.error('Error fetching user books:', err.message);
       setError(err.message);
+    }
+  };
+
+  const fetchBookDetails = async (bookId) => {
+    try {
+      const response = await fetch(`http://localhost:3500/api/books/${bookId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        console.error(`Failed to fetch details for book ID ${bookId}`);
+        return null;
+      }
+
+      const bookData = await response.json();
+      return bookData.data; // Assuming the API response has a `data` field
+    } catch (err) {
+      console.error(`Error fetching book details for ID ${bookId}:`, err.message);
+      return null;
     }
   };
 
@@ -80,51 +93,6 @@ const UserProfile = () => {
     initializeData();
   }, []);
 
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:3500/api/users/me', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(editableUser),
-      });
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to update profile.');
-      }
-
-      const updatedData = await response.json();
-      setUser(updatedData);
-      alert('Profile updated successfully');
-    } catch (err) {
-      console.error('Error updating profile:', err.message);
-      setError(err.message);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('http://localhost:3500/api/users/me/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to log out.');
-      }
-
-      navigate('/login');
-    } catch (err) {
-      console.error('Error logging out:', err.message);
-      setError(err.message);
-    }
-  };
-
   const handleAddReview = async (e) => {
     e.preventDefault();
     if (!selectedBook) {
@@ -132,14 +100,14 @@ const UserProfile = () => {
       return;
     }
 
-    // Debug log
-    console.log('Adding review for book:', {
-      selectedBook,
-      userId: user?._id,
-      bookId: selectedBook.book // This should be the book ID
-    });
-
     try {
+      console.log('Adding review for book:', {
+        userId: user?._id,
+        bookId: selectedBook.book || selectedBook.bookData?._id, 
+        reviewText: review.text,
+        rating: parseInt(review.rating),
+      });
+
       const response = await fetch('http://localhost:3500/api/userbooks/review', {
         method: 'POST',
         headers: {
@@ -148,7 +116,7 @@ const UserProfile = () => {
         credentials: 'include',
         body: JSON.stringify({
           userId: user._id,
-          bookId: selectedBook.book, // This should match the structure from your API
+          bookId: selectedBook.book || selectedBook.bookData?._id, 
           reviewText: review.text,
           rating: parseInt(review.rating),
         }),
@@ -159,11 +127,11 @@ const UserProfile = () => {
         throw new Error(errorResponse.error || 'Failed to add review.');
       }
 
-      await fetchUserBooks(); // Refresh the books list
+      await fetchUserBooks(); 
       setReview({ text: '', rating: '' });
-      alert('Review added successfully');
+      alert('Ajout de la critique utilisateur');
     } catch (err) {
-      console.error('Error adding review:', err.message);
+      console.error('Erreur ajout de critique:', err.message);
       setError(err.message);
     }
   };
@@ -183,8 +151,8 @@ const UserProfile = () => {
         credentials: 'include',
         body: JSON.stringify({
           userId: user._id,
-          bookId: selectedBook.book,
-          updates: { status: newStatus }
+          bookId: selectedBook.book || selectedBook.bookData?._id,
+          updates: { status: newStatus },
         }),
       });
 
@@ -216,7 +184,7 @@ const UserProfile = () => {
         credentials: 'include',
         body: JSON.stringify({
           userId: user._id,
-          bookId: selectedBook.book,
+          bookId: selectedBook.book || selectedBook.bookData?._id,
         }),
       });
 
@@ -251,13 +219,13 @@ const UserProfile = () => {
       <Card className="mb-4">
         <Card.Header as="h2">My Profile</Card.Header>
         <Card.Body>
-          <Form onSubmit={handleUpdateProfile}>
+          <Form>
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
                 type="text"
                 value={editableUser.username || ''}
-                onChange={(e) => setEditableUser(prev => ({...prev, username: e.target.value}))}
+                onChange={(e) => setEditableUser((prev) => ({ ...prev, username: e.target.value }))}
               />
             </Form.Group>
 
@@ -266,13 +234,13 @@ const UserProfile = () => {
               <Form.Control
                 type="email"
                 value={editableUser.email || ''}
-                onChange={(e) => setEditableUser(prev => ({...prev, email: e.target.value}))}
+                onChange={(e) => setEditableUser((prev) => ({ ...prev, email: e.target.value }))}
               />
             </Form.Group>
 
             <div className="d-flex gap-2">
               <Button type="submit" variant="primary">Save Changes</Button>
-              <Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
+              <Button variant="outline-danger" onClick={() => navigate('/login')}>Logout</Button>
             </div>
           </Form>
         </Card.Body>
@@ -287,23 +255,21 @@ const UserProfile = () => {
                 <p className="text-muted text-center">No books found.</p>
               ) : (
                 userBooks.map((userBook) => (
-                  <Card 
-                    key={userBook._id} 
+                  <Card
+                    key={userBook._id}
                     className={`mb-3 ${selectedBook?._id === userBook._id ? 'border-primary' : ''}`}
                     onClick={() => setSelectedBook(userBook)}
                     style={{ cursor: 'pointer' }}
                   >
                     <Card.Body>
-                      <Card.Title>
-                        {userBook.bookData?.title || userBook.title || 'Unknown Book'}
-                      </Card.Title>
+                      <Card.Title>{userBook.bookData?.title || 'Unknown Book'}</Card.Title>
                       <Card.Text>
-                        <small className="text-muted">Status: {userBook.status}</small><br/>
+                        <small className="text-muted">Status: {userBook.status}</small><br />
                         <small className="text-muted">
                           Review: {userBook.review?.text || 'No review yet'}
-                        </small><br/>
+                        </small><br />
                         <small className="text-muted">
-                          Rating: {userBook.review?.rating || 'No rating'}
+                          Rating: {userBook.rating || userBook.review?.rating || 'No rating'}
                         </small>
                       </Card.Text>
                     </Card.Body>
@@ -315,9 +281,7 @@ const UserProfile = () => {
             {selectedBook && (
               <Col md={6}>
                 <Card>
-                  <Card.Header>
-                    Selected Book: {selectedBook.bookData?.title || selectedBook.title || 'Unknown Book'}
-                  </Card.Header>
+                  <Card.Header>Selected Book: {selectedBook.bookData?.title || 'Unknown Book'}</Card.Header>
                   <Card.Body>
                     <Form onSubmit={handleAddReview}>
                       <Form.Group className="mb-3">
@@ -326,7 +290,7 @@ const UserProfile = () => {
                           as="textarea"
                           rows={3}
                           value={review.text}
-                          onChange={(e) => setReview(prev => ({...prev, text: e.target.value}))}
+                          onChange={(e) => setReview((prev) => ({ ...prev, text: e.target.value }))}
                         />
                       </Form.Group>
 
@@ -337,22 +301,16 @@ const UserProfile = () => {
                           min="1"
                           max="5"
                           value={review.rating}
-                          onChange={(e) => setReview(prev => ({...prev, rating: e.target.value}))}
+                          onChange={(e) => setReview((prev) => ({ ...prev, rating: e.target.value }))}
                         />
                       </Form.Group>
 
                       <div className="d-grid gap-2">
                         <Button type="submit" variant="primary">Add Review</Button>
-                        <Button 
-                          variant="outline-primary"
-                          onClick={() => handleUpdateUserBook('read')}
-                        >
+                        <Button variant="outline-primary" onClick={() => handleUpdateUserBook('read')}>
                           Mark as Read
                         </Button>
-                        <Button 
-                          variant="outline-danger"
-                          onClick={handleDeleteUserBook}
-                        >
+                        <Button variant="outline-danger" onClick={handleDeleteUserBook}>
                           Remove Book
                         </Button>
                       </div>

@@ -24,9 +24,15 @@ const AddBooks = () => {
   const [newBook, setNewBook] = useState(initialBookState);
   const [error, setError] = useState(null);
 
+  let fileInput = null; // Reference for the file input
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewBook({ ...newBook, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setNewBook({ ...newBook, coverImage: e.target.files[0] });
   };
 
   const handleSubmit = async (e) => {
@@ -166,15 +172,25 @@ const AddBooks = () => {
           />
         </div>
         <div>
-          <label>Couverture</label>
-          <input
-            type="text"
-            name="coverImage"
-            value={newBook.coverImage}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  <label>Couverture</label>
+  <input
+    type="file"
+    name="coverImage"
+    accept="image/*"
+    onChange={handleFileChange}
+    style={{ display: 'none' }} // Hide the actual input
+    ref={(input) => (fileInput = input)} // Reference for the input
+  />
+  {/* Simple button to trigger the file input */}
+  <button
+    type="button"
+    onClick={() => fileInput.click()} // Open file picker
+  >
+    Select Image
+  </button>
+  {/* Display the selected file name */}
+  {newBook.coverImage && <span>{newBook.coverImage.name}</span>}
+</div>
         <div>
           <label>Tags</label>
           <input

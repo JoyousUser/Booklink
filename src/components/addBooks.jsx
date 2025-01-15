@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const AddBooks = () => {
   const initialBookState = {
@@ -13,10 +13,10 @@ const AddBooks = () => {
     edition: '',
     pages: '',
     description: '',
-    coverImage: '',
     categories: '',
     openSourceLink: '',
     status: '',
+    coverImage: null, // For storing the uploaded file
   };
 
   const [books, setBooks] = useState([]);
@@ -28,31 +28,36 @@ const AddBooks = () => {
     setNewBook({ ...newBook, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    setNewBook({ ...newBook, coverImage: e.target.files[0] });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newBook.title || !newBook.author) {
       setError('Title and Author are required fields.');
       return;
     }
-  
+
     try {
       const formData = new FormData();
       Object.entries(newBook).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (value) formData.append(key, value); // Only append non-empty fields
       });
-  
+
       const response = await fetch('http://localhost:3500/api/books/add', {
         method: 'POST',
-        body: formData, 
+        body: formData,
       });
-  
+
       if (response.ok) {
         const addedBook = await response.json();
         setBooks([...books, addedBook]);
         setNewBook(initialBookState);
         setError(null);
       } else {
-        setError('Failed to add book');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to add book');
       }
     } catch (error) {
       setError('Failed to add book: ' + error.message);
@@ -65,7 +70,7 @@ const AddBooks = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Titre:</label>
+          <label>Title:</label>
           <input
             type="text"
             name="title"
@@ -75,14 +80,13 @@ const AddBooks = () => {
           />
         </div>
         <div>
-          <label>Titre complet:</label>
+          <label>Title Long:</label>
           <input
             type="text"
             name="titleLong"
             value={newBook.titleLong}
             onChange={handleChange}
           />
-
         </div>
         <div>
           <label>ISBN:</label>
@@ -91,7 +95,6 @@ const AddBooks = () => {
             name="isbn"
             value={newBook.isbn}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -101,11 +104,10 @@ const AddBooks = () => {
             name="isbn13"
             value={newBook.isbn13}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
-          <label>Auteur:</label>
+          <label>Author:</label>
           <input
             type="text"
             name="author"
@@ -115,13 +117,12 @@ const AddBooks = () => {
           />
         </div>
         <div>
-          <label>Editeur:</label>
+          <label>Publisher:</label>
           <input
             type="text"
             name="publisher"
             value={newBook.publisher}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -131,71 +132,73 @@ const AddBooks = () => {
             name="edition"
             value={newBook.edition}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
           <label>Pages:</label>
           <input
-            type="text"
+            type="number"
             name="pages"
             value={newBook.pages}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
           <label>Description:</label>
-          <input
-            type="text"
+          <textarea
             name="description"
             value={newBook.description}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
-          <label>Couverture</label>
+          <label>Cover Image:</label>
           <input
-            type="text"
+            type="file"
             name="coverImage"
-            value={newBook.coverImage}
-            onChange={handleChange}
-            required
+            accept="image/*"
+            onChange={handleFileChange}
           />
         </div>
         <div>
-          <label>Tags</label>
+          <label>Categories:</label>
           <input
             type="text"
             name="categories"
             value={newBook.categories}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
-          <label>Lien vers une ressource valide</label>
+          <label>Open Source Link:</label>
           <input
-            type="text"
+            type="url"
             name="openSourceLink"
             value={newBook.openSourceLink}
             onChange={handleChange}
-            
           />
         </div>
-   
         <div>
-  <label>Date:</label>
-  <input
-    type="date"
-    name="publishDate"
-    value={newBook.publishDate}
-    onChange={handleChange}
-  />
-</div>
-
-      
+          <label>Publish Date:</label>
+          <input
+            type="date"
+            name="publishDate"
+            value={newBook.publishDate}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Status:</label>
+          <select
+            name="status"
+            value={newBook.status}
+            onChange={handleChange}
+          >
+            <option value="available">Available</option>
+            <option value="deleted">Deleted</option>
+            <option value="private">Private</option>
+          </select>
+        </div>
         <button type="submit">Add Book</button>
       </form>
     </div>
@@ -203,78 +206,3 @@ const AddBooks = () => {
 };
 
 export default AddBooks;
-
-/*  title: {
-        type: String,
-        required: true,
-        index: true 
-    },
-    titleLong: {
-        type: String,
-        required: false
-    },
-    isbn: {
-        type: String,
-        unique: true,
-        sparse: true,  
-        index: true
-    },
-    isbn13: {
-        type: String,
-        unique: true,
-        sparse: true,
-        index: true
-    },
-    author: {
-        type: String,
-        required: true,
-        index: true
-    },
-    publisher: {
-        type: String,
-        required: false
-    },
-    language: {
-        type: String,
-        default: 'en'
-    },
-    publishDate: {
-        type: Date,
-        required: false
-    },
-    edition: {
-        type: String,
-        required: false
-    },
-    pages: {
-        type: Number,
-        required: false
-    },
-    description: {
-        type: String,
-        required: false
-    },
-    coverImage: {
-        url: String,
-        cloudinaryId: String,  
-        thumbnailUrl: String  
-    },
-    categories: [{
-        type: String,
-        index: true
-    }],
-    openSourceLink: {
-        type: String,
-        required: false,
-        validate: {
-            validator: function(v) {
-                return !v || /^https?:\/\/.+/.test(v)
-            },
-            message: 'Invalid URL format'
-        }
-    },
-    status: {
-        type: String,
-        enum: ['available', 'deleted', 'private'],
-        default: 'available'
-    }*/

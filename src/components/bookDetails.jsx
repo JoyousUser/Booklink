@@ -42,6 +42,7 @@ const BookDetails = () => {
     }
   }, []);
 
+
   // Render the component
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -54,7 +55,7 @@ const BookDetails = () => {
       <p><strong>Description:</strong> {book.description}</p>
       <p><strong>Categories:</strong> {book.categories?.join(', ')}</p>
       <p><strong>Pages:</strong> {book.pages}</p>
-      <img className="imageCoverDetail" src={ExampleCarouselImage} alt="First slide"
+      <img className="imageCoverDetail" src={book.coverImage?.url || ExampleCarouselImage} alt="First slide"
             />
     </div>
   );

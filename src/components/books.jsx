@@ -55,7 +55,7 @@ const AllBooks = () => {
         {books.map((book) => (
           <Col xs={12} sm={6} md={4} lg={3} key={book._id} className="mb-4">
             <ListGroup className="image-container">
-            <img className="imageCover" src={ExampleCarouselImage} alt="First slide"
+            <img className="imageCover" src={book.coverImage?.url || ExampleCarouselImage} alt="First slide"
             />
               <ListGroup.Item>{book.title}</ListGroup.Item>
               <ListGroup.Item>{book.author}</ListGroup.Item>
