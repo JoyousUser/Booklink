@@ -6,8 +6,7 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   const { state } = useAppContext();
   const { user } = state;
 
-  console.log('ProtectedRoute State:', state);
-  console.log('ProtectedRoute User:', user);
+ 
 
   // Handle null user (loading state)
   if (user === null) {
@@ -22,7 +21,7 @@ const role = user.role?.User; // Safely access 'User' key
     return <Navigate to="/dashboard" replace />;
   }
 
-  console.log('User is authorized with role:', role);
+
   return <Outlet />; // Render child routes if authorized
 };
 

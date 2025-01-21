@@ -45,7 +45,7 @@ function DashboardComponent() {
           }
         }
       } catch (error) {
-        console.error('Auth error:', error);
+       
         if (mounted) {
           dispatch({ type: 'SET_USER', payload: null });
           navigate('/login');
@@ -85,9 +85,7 @@ function DashboardComponent() {
     }
   }, [state.user, navigate]);
 
-  const sessionPrint = () => {
-    console.log(state?.user);
-  };
+
 
   if (state.user === undefined) {
     return (

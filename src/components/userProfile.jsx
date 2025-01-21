@@ -31,7 +31,7 @@ const UserProfile = () => {
         username: data.username,
         email: data.email,
       });
-      console.log('Editable User:', editableUser);
+    
     } catch (err) {
       console.error('Error fetching user profile:', err.message);
       setError(err.message);
@@ -41,13 +41,12 @@ const UserProfile = () => {
   // Fetch user books
   const fetchUserBooks = async () => {
     if (!user?._id) {
-      console.log('User ID not yet available. Skipping fetchUserBooks.');
       return;
     }
 
     try {
       const filterBy = JSON.stringify({ user: user._id });
-      console.log('Sending filterBy to backend:', filterBy);
+    
 
       const response = await fetch(
         `http://localhost:3500/api/userbooks/get?filterBy=${encodeURIComponent(filterBy)}`,
@@ -63,7 +62,7 @@ const UserProfile = () => {
       }
 
       const data = await response.json();
-      console.log('Fetched user books:', data);
+    
       setUserBooks(data.data);
     } catch (err) {
       console.error('Error fetching user books:', err.message);
@@ -86,7 +85,7 @@ const UserProfile = () => {
         'review.rating': parseInt(review.rating, 10),
       };
   
-      console.log('Submitting review and rating for:', selectedBook._id, updates);
+   
   
       const response = await fetch('http://localhost:3500/api/userbooks/patch', {
         method: 'PATCH',
@@ -106,7 +105,7 @@ const UserProfile = () => {
         throw new Error(errorResponse.error || 'Failed to update review and rating.');
       }
   
-      console.log('Review and rating updated successfully.');
+    
       await fetchUserBooks(); // Refresh user books
       setReview({ text: '', rating: '' });
       alert('Review and rating updated successfully!');
@@ -125,7 +124,7 @@ const UserProfile = () => {
     }
 
     try {
-      console.log('Marking book as read:', selectedBook._id);
+     
 
       const response = await fetch('http://localhost:3500/api/userbooks/patch', {
         method: 'PATCH',
@@ -236,7 +235,7 @@ const UserProfile = () => {
                     key={userBook._id}
                     className={`mb-3 ${selectedBook?._id === userBook._id ? 'border-primary' : ''}`}
                     onClick={() => {
-                      console.log('Book selected:', userBook);
+                     
                       setSelectedBook(userBook);
                     }}
                     style={{ cursor: 'pointer' }}

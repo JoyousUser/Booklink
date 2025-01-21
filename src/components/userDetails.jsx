@@ -111,7 +111,7 @@ const UserDetails = () => {
     const userId = getUserIdFromPath();
     if (userId) {
       fetchUserDetails(userId);
-      console.log('Extracted userId:', userId);
+      
     } else {
       setError('No user ID found in the URL path.');
       setLoading(false);
