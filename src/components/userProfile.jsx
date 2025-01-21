@@ -12,12 +12,50 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchUserBooks = async () => {
+  // Fetch user profile
+  const fetchUserProfile = async () => {
     try {
-      const response = await fetch('http://localhost:3500/api/userbooks/get', {
+      const response = await fetch('http://localhost:3500/api/users/me', {
         method: 'GET',
         credentials: 'include',
       });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Failed to fetch user profile.');
+      }
+
+      const data = await response.json();
+      setUser(data);
+      setEditableUser({
+        username: data.username,
+        email: data.email,
+      });
+      console.log('Editable User:', editableUser);
+    } catch (err) {
+      console.error('Error fetching user profile:', err.message);
+      setError(err.message);
+    }
+  };
+
+  // Fetch user books
+  const fetchUserBooks = async () => {
+    if (!user?._id) {
+      console.log('User ID not yet available. Skipping fetchUserBooks.');
+      return;
+    }
+
+    try {
+      const filterBy = JSON.stringify({ user: user._id });
+      console.log('Sending filterBy to backend:', filterBy);
+
+      const response = await fetch(
+        `http://localhost:3500/api/userbooks/get?filterBy=${encodeURIComponent(filterBy)}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
 
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -25,124 +63,31 @@ const UserProfile = () => {
       }
 
       const data = await response.json();
-      const booksWithDetails = await Promise.all(
-        data.data.map(async (userBook) => {
-          const bookDetails = await fetchBookDetails(userBook.book);
-          return { ...userBook, bookData: bookDetails };
-        })
-      );
-
-      setUserBooks(booksWithDetails);
+      console.log('Fetched user books:', data);
+      setUserBooks(data.data);
     } catch (err) {
       console.error('Error fetching user books:', err.message);
       setError(err.message);
     }
   };
 
-  const fetchBookDetails = async (bookId) => {
-    try {
-      const response = await fetch(`http://localhost:3500/api/books/${bookId}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        console.error(`Failed to fetch details for book ID ${bookId}`);
-        return null;
-      }
-
-      const bookData = await response.json();
-      return bookData.data; // Assuming the API response has a `data` field
-    } catch (err) {
-      console.error(`Error fetching book details for ID ${bookId}:`, err.message);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await fetch('http://localhost:3500/api/users/me', {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          const errorResponse = await response.json();
-          throw new Error(errorResponse.error || 'Failed to fetch user profile.');
-        }
-
-        const data = await response.json();
-        setUser(data);
-        setEditableUser({
-          username: data.username,
-          email: data.email,
-        });
-      } catch (err) {
-        console.error('Error fetching user profile:', err.message);
-        setError(err.message);
-      }
-    };
-
-    const initializeData = async () => {
-      await fetchUserProfile();
-      await fetchUserBooks();
-      setLoading(false);
-    };
-
-    initializeData();
-  }, []);
-
+  // Handle adding a review
   const handleAddReview = async (e) => {
     e.preventDefault();
+  
     if (!selectedBook) {
-      setError('No book selected');
+      setError('No book selected for review.');
       return;
     }
-
+  
     try {
-      console.log('Adding review for book:', {
-        userId: user?._id,
-        bookId: selectedBook.book || selectedBook.bookData?._id, 
-        reviewText: review.text,
-        rating: parseInt(review.rating),
-      });
-
-      const response = await fetch('http://localhost:3500/api/userbooks/review', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          userId: user._id,
-          bookId: selectedBook.book || selectedBook.bookData?._id, 
-          reviewText: review.text,
-          rating: parseInt(review.rating),
-        }),
-      });
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to add review.');
-      }
-
-      await fetchUserBooks(); 
-      setReview({ text: '', rating: '' });
-      alert('Ajout de la critique utilisateur');
-    } catch (err) {
-      console.error('Erreur ajout de critique:', err.message);
-      setError(err.message);
-    }
-  };
-
-  const handleUpdateUserBook = async (newStatus) => {
-    if (!selectedBook) {
-      setError('No book selected');
-      return;
-    }
-
-    try {
+      const updates = {
+        'review.text': review.text,
+        'review.rating': parseInt(review.rating, 10),
+      };
+  
+      console.log('Submitting review and rating for:', selectedBook._id, updates);
+  
       const response = await fetch('http://localhost:3500/api/userbooks/patch', {
         method: 'PATCH',
         headers: {
@@ -152,32 +97,38 @@ const UserProfile = () => {
         body: JSON.stringify({
           userId: user._id,
           bookId: selectedBook.book || selectedBook.bookData?._id,
-          updates: { status: newStatus },
+          updates,
         }),
       });
-
+  
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to update book status.');
+        throw new Error(errorResponse.error || 'Failed to update review and rating.');
       }
-
-      await fetchUserBooks();
-      alert('Book status updated successfully');
+  
+      console.log('Review and rating updated successfully.');
+      await fetchUserBooks(); // Refresh user books
+      setReview({ text: '', rating: '' });
+      alert('Review and rating updated successfully!');
     } catch (err) {
-      console.error('Error updating book status:', err.message);
+      console.error('Error updating review and rating:', err.message);
       setError(err.message);
     }
   };
+  
 
-  const handleDeleteUserBook = async () => {
+  // Handle marking a book as read
+  const handleMarkAsRead = async () => {
     if (!selectedBook) {
-      setError('No book selected');
+      setError('No book selected to mark as read.');
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:3500/api/userbooks/delete', {
-        method: 'DELETE',
+      console.log('Marking book as read:', selectedBook._id);
+
+      const response = await fetch('http://localhost:3500/api/userbooks/patch', {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -185,23 +136,43 @@ const UserProfile = () => {
         body: JSON.stringify({
           userId: user._id,
           bookId: selectedBook.book || selectedBook.bookData?._id,
+          updates: { status: 'read' },
         }),
       });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.error || 'Failed to delete book.');
+        throw new Error(errorResponse.error || 'Failed to mark book as read.');
       }
 
-      setSelectedBook(null);
-      await fetchUserBooks();
-      alert('Book removed successfully');
+      console.log('Book marked as read successfully.');
+      await fetchUserBooks(); // Refresh the user books
+      alert('Book marked as read!');
     } catch (err) {
-      console.error('Error deleting book:', err.message);
+      console.error('Error marking book as read:', err.message);
       setError(err.message);
     }
   };
 
+  // Fetch user profile once on mount
+  useEffect(() => {
+    const initializeProfile = async () => {
+      await fetchUserProfile();
+      setLoading(false); // Stop loading when profile is fetched
+    };
+
+    initializeProfile();
+  }, []);
+
+  // Fetch user books when user is set
+  useEffect(() => {
+    if (user) {
+      console.log('User data set. Fetching user books...');
+      fetchUserBooks();
+    }
+  }, [user]); // Only run when `user` changes
+
+  // UI for loading state
   if (loading) {
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -215,7 +186,7 @@ const UserProfile = () => {
   return (
     <Container className="py-5">
       {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
-      
+
       <Card className="mb-4">
         <Card.Header as="h2">My Profile</Card.Header>
         <Card.Body>
@@ -224,8 +195,11 @@ const UserProfile = () => {
               <Form.Label>Username</Form.Label>
               <Form.Control
                 type="text"
+                name="username"
                 value={editableUser.username || ''}
-                onChange={(e) => setEditableUser((prev) => ({ ...prev, username: e.target.value }))}
+                onChange={(e) =>
+                  setEditableUser((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+                }
               />
             </Form.Group>
 
@@ -233,8 +207,11 @@ const UserProfile = () => {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
+                name="email"
                 value={editableUser.email || ''}
-                onChange={(e) => setEditableUser((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setEditableUser((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+                }
               />
             </Form.Group>
 
@@ -258,7 +235,10 @@ const UserProfile = () => {
                   <Card
                     key={userBook._id}
                     className={`mb-3 ${selectedBook?._id === userBook._id ? 'border-primary' : ''}`}
-                    onClick={() => setSelectedBook(userBook)}
+                    onClick={() => {
+                      console.log('Book selected:', userBook);
+                      setSelectedBook(userBook);
+                    }}
                     style={{ cursor: 'pointer' }}
                   >
                     <Card.Body>
@@ -306,12 +286,9 @@ const UserProfile = () => {
                       </Form.Group>
 
                       <div className="d-grid gap-2">
-                        <Button type="submit" variant="primary">Add Review</Button>
-                        <Button variant="outline-primary" onClick={() => handleUpdateUserBook('read')}>
+                        <Button type="submit" variant="primary">Submit Review</Button>
+                        <Button type="button" variant="outline-primary" onClick={handleMarkAsRead}>
                           Mark as Read
-                        </Button>
-                        <Button variant="outline-danger" onClick={handleDeleteUserBook}>
-                          Remove Book
                         </Button>
                       </div>
                     </Form>

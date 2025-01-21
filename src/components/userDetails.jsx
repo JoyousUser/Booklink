@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ExampleCarouselImage from '../assets/cover.jpg';
 
 const UserDetails = () => {
-  const [user, setUser] = useState(null); // Original user data
-  const [editableUser, setEditableUser] = useState({}); // Editable fields
+  const [user, setUser] = useState(null);
+  const [editableUser, setEditableUser] = useState({}); 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Extract user ID from URL
   const getUserIdFromPath = () => {
     const urlParts = window.location.pathname.split('/');
     return urlParts[urlParts.length - 1];
   };
 
-  // Fetch user details
   const fetchUserDetails = async (id) => {
     try {
       const response = await fetch(`http://localhost:3500/api/admin/users/${id}`);
@@ -26,7 +24,7 @@ const UserDetails = () => {
       setEditableUser({
         email: data.email,
         username: data.username,
-        roles: Object.values(data.roles || {}).join(', '), // Editable fields only
+        roles: Object.values(data.roles || {}).join(', '),
       });
     } catch (err) {
       console.error('Error fetching user details:', err.message);
@@ -36,9 +34,8 @@ const UserDetails = () => {
       setLoading(false);
     }
   };
-  
 
-  // Patch user details
+
   const patchUserDetails = async () => {
     try {
       const payload = { ...editableUser };
@@ -66,7 +63,7 @@ const UserDetails = () => {
       }
   
       const updatedData = await response.json();
-      setUser(updatedData); // Update the original user state with the new data
+      setUser(updatedData); 
     } catch (err) {
       console.error('Error patching user details:', err.message);
       setError(err.message);
@@ -86,7 +83,7 @@ const UserDetails = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload), // Properly formatted payload
+        body: JSON.stringify(payload),
       });
   
       if (!response.ok) {
@@ -95,14 +92,13 @@ const UserDetails = () => {
       }
   
       console.log('User deleted successfully.');
-      setUser(null); // Clear user state
+      setUser(null); 
     } catch (err) {
       console.error('Error deleting user:', err.message);
       setError(err.message);
     }
   };
 
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditableUser((prev) => ({
@@ -115,6 +111,7 @@ const UserDetails = () => {
     const userId = getUserIdFromPath();
     if (userId) {
       fetchUserDetails(userId);
+      console.log('Extracted userId:', userId);
     } else {
       setError('No user ID found in the URL path.');
       setLoading(false);

@@ -11,16 +11,14 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
 
   // Handle null user (loading state)
   if (user === null) {
-    console.log('User state is null, showing loader or waiting...');
-    return null; // Optional: Replace with a loader
+    
+    return null;
   }
-
-  // Extract role correctly
-  const role = user.role?.User; // Safely access 'User' key
+const role = user.role?.User; // Safely access 'User' key
 
   // Check if role exists and is allowed
   if (!role || !allowedRoles.includes(role)) {
-    console.log(`Unauthorized Role: ${role}. Redirecting to /dashboard.`);
+    
     return <Navigate to="/dashboard" replace />;
   }
 
