@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ExampleCarouselImage from '../assets/cover.jpg';
-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const BookDetails = () => {
   const [book, setBook] = useState(null);

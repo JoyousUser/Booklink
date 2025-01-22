@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Form, Col, Container, Row } from 'react-bootstrap';
 import { useAppContext } from '../appContext'; 
 import { Navigate, useNavigate, useNavigation } from 'react-router-dom';
-const apiBaseUrl = process.env.REACT_APP_API_URL;
 
 function CenteredForm() {
   const { dispatch } = useAppContext();
