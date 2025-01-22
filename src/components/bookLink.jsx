@@ -52,7 +52,7 @@ const AddBooks = () => {
         formData.append(key, value || initialBookState[key]); // Use fallback if value is empty
       });
 
-      const response = await fetch('http://localhost:3500/api/books/add', {
+      const response = await fetch(`${apiBaseUrl}/api/books/add`, {
         method: 'POST',
         body: formData,
         credentials: 'include', // Include cookies for authentication

@@ -11,12 +11,12 @@ function DashboardComponent() {
 
     const checkSession = async () => {
       try {
-        const sessionRes = await fetch('http://localhost:3500/api/session', {
+        const sessionRes = await fetch(`${apiBaseUrl}/api/session`, {
           credentials: 'include'
         });
 
         if (!sessionRes.ok) {
-          const refreshRes = await fetch('http://localhost:3500/api/refresh', {
+          const refreshRes = await fetch(`${apiBaseUrl}/api/refresh`, {
             method: 'GET',
             credentials: 'include'
           });
@@ -25,7 +25,7 @@ function DashboardComponent() {
             throw new Error('Refresh failed');
           }
 
-          const newSessionRes = await fetch('http://localhost:3500/api/session', {
+          const newSessionRes = await fetch(`${apiBaseUrl}/api/session`, {
             credentials: 'include'
           });
 
@@ -57,7 +57,7 @@ function DashboardComponent() {
 
     const refreshInterval = setInterval(async () => {
       try {
-        const refreshRes = await fetch('http://localhost:3500/api/refresh', {
+        const refreshRes = await fetch(`${apiBaseUrl}/api/refresh`, {
           method: 'GET',
           credentials: 'include'
         });

@@ -15,7 +15,7 @@ const AllBooks = () => {
   const fetchBooks = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3500/api/books?page=${page}&sort=${sort}&order=${order}`
+        `${apiBaseUrl}/api/books?page=${page}&sort=${sort}&order=${order}`
       );
       const data = await response.json();
       if (data.success) setBooks(data.data);

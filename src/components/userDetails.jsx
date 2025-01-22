@@ -14,7 +14,7 @@ const UserDetails = () => {
 
   const fetchUserDetails = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3500/api/admin/users/${id}`);
+      const response = await fetch(`${apiBaseUrl}/api/admin/users/${id}`);
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.error || 'Failed to fetch user details.');
@@ -49,7 +49,7 @@ const UserDetails = () => {
         }, {});
       }
   
-      const response = await fetch(`http://localhost:3500/api/users/${user._id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/users/${user._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const UserDetails = () => {
        
       };
   
-      const response = await fetch(`http://localhost:3500/api/admin/users/delete`, {
+      const response = await fetch(`${apiBaseUrl}/api/admin/users/delete`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

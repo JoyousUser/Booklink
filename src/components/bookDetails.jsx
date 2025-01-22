@@ -15,7 +15,7 @@ const BookDetails = () => {
   // Fetch book details based on `bookId`
   const fetchBookDetails = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3500/api/books/${id}`);
+      const response = await fetch(`${apiBaseUrl}/api/books/${id}`);
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.error || 'Failed to fetch book details.');

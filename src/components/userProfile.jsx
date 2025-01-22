@@ -15,7 +15,7 @@ const UserProfile = () => {
   // Fetch user profile
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch('http://localhost:3500/api/users/me', {
+      const response = await fetch(`${apiBaseUrl}/api/users/me`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -49,7 +49,7 @@ const UserProfile = () => {
     
 
       const response = await fetch(
-        `http://localhost:3500/api/userbooks/get?filterBy=${encodeURIComponent(filterBy)}`,
+        `${apiBaseUrl}/api/userbooks/get?filterBy=${encodeURIComponent(filterBy)}`,
         {
           method: 'GET',
           credentials: 'include',
@@ -87,7 +87,7 @@ const UserProfile = () => {
   
    
   
-      const response = await fetch('http://localhost:3500/api/userbooks/patch', {
+      const response = await fetch(`${apiBaseUrl}/api/userbooks/patch`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const UserProfile = () => {
     try {
      
 
-      const response = await fetch('http://localhost:3500/api/userbooks/patch', {
+      const response = await fetch(`${apiBaseUrl}/api/userbooks/patch`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

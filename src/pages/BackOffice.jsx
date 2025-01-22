@@ -16,7 +16,7 @@ const BackOffice = () => {
   const fetchUsers = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3500/api/admin/users?page=${page}&sort=${sort}&order=${order}`
+        `${apiBaseUrl}/api/admin/users?page=${page}&sort=${sort}&order=${order}`
       );
       const data = await response.json();
       if (data.success) setUsers(data.data);
