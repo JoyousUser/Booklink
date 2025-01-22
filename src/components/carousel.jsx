@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import ExampleCarouselImage from '../assets/cover.jpg';
-
+import apiBaseUrl from '../config';
+import api from '../services/api'
 
 
 function ControlledCarousel() {

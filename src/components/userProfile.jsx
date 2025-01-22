@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
+import apiBaseUrl from '../config';
+import api from '../services/api'
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);

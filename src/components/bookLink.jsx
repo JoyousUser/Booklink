@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import apiBaseUrl from './config';
-import api from './services/api'
-
+import apiBaseUrl from '../config';
+import api from '../services/api'
 const AddBooks = () => {
   const initialBookState = {
     title: '',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ExampleCarouselImage from '../assets/cover.jpg';
-import apiBaseUrl from './config';
-import api from './services/api'
+import apiBaseUrl from '../config';
+import api from '../services/api'
 const UserDetails = () => {
   const [user, setUser] = useState(null);
   const [editableUser, setEditableUser] = useState({}); 

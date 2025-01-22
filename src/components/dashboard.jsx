@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useAppContext } from '../appContext';
 import { useNavigate } from 'react-router-dom';
-import apiBaseUrl from './config';
-import api from './services/api'
-
+import apiBaseUrl from '../config';
+import api from '../services/api'
 function DashboardComponent() {
   const { state, dispatch } = useAppContext();
   const navigate = useNavigate();

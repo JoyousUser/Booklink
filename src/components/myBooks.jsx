@@ -2,6 +2,8 @@ import React from 'react';
 import { useAppContext } from '../appContext';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
+import apiBaseUrl from '../config';
+import api from '../services/api'
 
 const BookSelectionLoggedIn = () => {
   const { state } = useAppContext();
