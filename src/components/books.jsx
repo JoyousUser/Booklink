@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { useAppContext } from '../appContext';
 import ExampleCarouselImage from '../assets/cover.jpg';
+import apiBaseUrl from './config';
+import api from './services/api'
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);

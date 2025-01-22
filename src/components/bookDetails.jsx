@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ExampleCarouselImage from '../assets/cover.jpg';
+import apiBaseUrl from './config';
+import api from './services/api'
 
 const BookDetails = () => {
   const [book, setBook] = useState(null);

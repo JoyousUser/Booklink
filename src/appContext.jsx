@@ -1,4 +1,6 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
+import apiBaseUrl from './config';
+import api from './services/api'
 
 const AppContext = createContext();
 
