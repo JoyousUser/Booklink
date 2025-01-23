@@ -3,6 +3,8 @@ import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { useAppContext } from '../appContext';
 import { useNavigate } from 'react-router-dom';
 import ExampleCarouselImage from '../assets/cover.jpg';
+import apiBaseUrl from '../config';
+import api from '../services/api'
 
 const BackOffice = () => {
   const [users, setUsers] = useState([]);
