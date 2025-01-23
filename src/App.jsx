@@ -14,6 +14,8 @@ import ProtectedRoute from './components/protectedRoute';
 import BackOffice from './pages/BackOffice';
 import UserDetails from './components/userDetails';
 import UserProfile from './components/userProfile';
+import apiBaseUrl from './config';
+import api from './services/api'
 
 function App() {
   return (

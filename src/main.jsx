@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AppProvider } from '../src/appContext';
-
+import apiBaseUrl from './config';
+import api from './services/api'
 
 
 const rootElement = document.getElementById('root');
