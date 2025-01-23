@@ -47,7 +47,7 @@ const AddBooks = () => {
         if (value) formData.append(key, value); // Only append non-empty fields
       });
 
-      const response = await fetch(`${apiBaseUrl}/api/auth/api/books/add`, {
+      const response = await fetch(`${apiBaseUrl}/api//books/add`, {
         method: 'POST',
         body: formData,
       });

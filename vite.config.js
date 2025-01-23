@@ -6,5 +6,9 @@ export default defineConfig({
   plugins: [react()],
   define: {
     'process.env': {}, 
+   
+  }, build: {
+    outDir: 'dist',
+    assetsDir: 'assets', 
   },
 });

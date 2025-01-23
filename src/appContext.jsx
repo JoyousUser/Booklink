@@ -29,13 +29,13 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/api/auth/api/session`, {
+        const response = await fetch(`${apiBaseUrl}/api/auth/session`, {
           method: 'GET',
           credentials: 'include',
         });
         if (response.status === 401) {
           // If access token is expired, attempt to refresh it
-          const refreshResponse = await fetch(`${apiBaseUrl}/api/auth/api/refresh`, {
+          const refreshResponse = await fetch(`${apiBaseUrl}/api/auth/refresh`, {
               method: 'GET',
               credentials: 'include',
           });
