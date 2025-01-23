@@ -35,7 +35,7 @@ export const AppProvider = ({ children }) => {
         });
         if (response.status === 401) {
           // If access token is expired, attempt to refresh it
-          const refreshResponse = await fetch(`${apiBaseUrl}/apirefresh`, {
+          const refreshResponse = await fetch(`${apiBaseUrl}/api/refresh`, {
               method: 'GET',
               credentials: 'include',
           });
