@@ -29,6 +29,8 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
+        console.log('Fetching from:', import.meta.env.VITE_API_BASE_URL);
+        console.log('Fetching from:', apiBaseUrl);
         const response = await fetch(`${apiBaseUrl}/api/session`, {
           method: 'GET',
           credentials: 'include',
