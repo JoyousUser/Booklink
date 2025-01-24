@@ -15,7 +15,10 @@ const UserDetails = () => {
 
   const fetchUserDetails = async (id) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/admin/users/${id}`);
+      const response = await fetch(`${apiBaseUrl}/api/admin/users/${id}`, {
+        method: 'GET',
+        credentials: 'include', // Ensure cookies are sent
+      });
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.error || 'Failed to fetch user details.');
@@ -56,6 +59,7 @@ const UserDetails = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        credentials: 'include',
       });
   
       if (!response.ok) {
@@ -85,6 +89,7 @@ const UserDetails = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        credentials: 'include',
       });
   
       if (!response.ok) {
@@ -176,8 +181,7 @@ const UserDetails = () => {
           </div>
         </div>
       </div>
-      <button className="btn btn-primary mt-3"><a href="http://localhost:5173/backoffice/">
-                  Back to user management</a>
+      <button className="btn btn-primary mt-3"><a href={`${apiBaseUrl}/backoffice/`}>Back to user management</a>
                 </button>
     </div>
   );

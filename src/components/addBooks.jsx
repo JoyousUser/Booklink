@@ -50,6 +50,7 @@ const AddBooks = () => {
       const response = await fetch(`${apiBaseUrl}/api/books/add`, {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (response.ok) {
